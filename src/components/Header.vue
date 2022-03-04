@@ -52,6 +52,7 @@ header {
   padding: 0 40px;
   .logo {
     margin-right: 40px;
+    text-decoration: none;
   }
 }
 </style>
