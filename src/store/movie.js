@@ -8,7 +8,7 @@ export default {
 	// data
 	state: () => ({
 		movies: [], // 영화 목록
-		message: '',
+		message: 'Search for the movie title!',
 		loading: false,
 	}),
 
@@ -38,6 +38,12 @@ export default {
 		// 데이터 수정 안됨. 비동기 처리하는 곳
 	//searchMovies({ state, getters, commit }){
 		async searchMovies(context, payload){
+			if (context.state.loading) return
+			
+			context.commit('updateState', {
+				message: '',
+				loading: true,
+			})
 			try {
 				const res = await _fetchMovie({
 					...payload, 
@@ -74,6 +80,10 @@ export default {
 				context.commit('updateState', {
 					movies: [],
 					message
+				})
+			} finally {
+				context.commit('updateState', {
+					loading: false,
 				})
 			}
 		}
