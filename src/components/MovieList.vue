@@ -2,9 +2,7 @@
   <div class="container">
     <div
       :class="['inner', { 'no-result' : !movies.length }]">
-      <div
-        v-if="loading"
-        class="spinner-border text-primary"></div>
+      <Loader v-if="loading" />
       <div
         v-if="message"
         class="message">
@@ -24,10 +22,12 @@
 
 <script>
 import MovieItem from '~/components/MovieItem'
+import Loader from '~/components/Loader'
 
 export default {
   components: {
     MovieItem,
+    Loader
   },
   computed: {
     // movies는 처음 빈 배열이고, searchMovies에서 갱신이 된 후 반응성이 유지된 상태로? 활용되기 때문에? computed에 정의한다 @.@ 
