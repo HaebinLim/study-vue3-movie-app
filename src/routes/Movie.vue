@@ -1,20 +1,73 @@
 <template>
   <div class="container">
-    <div class="skeletons">
-      <div class="skeleton poster">
+    <template v-if="loading">
+      <div class="skeletons">
+        <div class="skeleton poster">
+        </div>
+        <div class="specs">
+          <div class="skeleton title"></div>
+          <div class="skeleton spec"></div>
+          <div class="skeleton plot"></div>
+          <div class="skeleton etc"></div>
+          <div class="skeleton etc"></div>
+        </div>
+      </div>
+      <Loader
+        :size="3"
+        :z-index="9"
+        fixed />
+    </template>
+    <div
+      v-else
+      class="movie-details">
+      <div
+        class="poster"
+        :style="{ backgroundImage: `url(${requestDiffSizeImage(theMovie.Poster)})` }">
+        <Loader
+          v-if="imageLoading"
+          absolute />
       </div>
       <div class="specs">
-        <div class="skeleton title"></div>
-        <div class="skeleton spec"></div>
-        <div class="skeleton plot"></div>
-        <div class="skeleton etc"></div>
-        <div class="skeleton etc"></div>
+        <div class="title">
+          {{ theMovie.Title }}
+        </div>
+        <div class="labels">
+          <span>{{ theMovie.Released }}</span>
+          <span>{{ theMovie.Runtime }}</span>
+          <span>{{ theMovie.Country }}</span>
+        </div>
+        <div class="plot">
+          {{ theMovie.Plot }}
+        </div>
+        <div class="ratings">
+          <h3>Ratings</h3>
+          <div class="rating-wrap">
+            <div
+              v-for="{ Source: name, Value: score } in theMovie.Ratings"
+              :key="name"
+              :title="name"
+              class="rating">
+              <img
+                :src="`https://raw.githubusercontent.com/ParkYoungWoong/vue3-movie-app/master/src/assets/${name}.png`"
+                :alt="name" />
+              <span>{{ score }}</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3>Actors</h3>
+          {{ theMovie.Actors }}
+        </div>
+        <div class="ratings">
+          <h3>Director</h3>
+          {{ theMovie.Director }}
+        </div>
+        <div v-if="theMovie.Production !== 'N/A'">
+          <h3>Production</h3>
+          {{ theMovie.Production }}
+        </div>
       </div>
     </div>
-    <Loader
-      :size="3"
-      :z-index="9"
-      fixed />
   </div>
 </template>
 
@@ -25,11 +78,35 @@ export default {
   components: {
     Loader
   },
+  data() {
+    return {
+      imageLoading: true,
+    }
+  },
+  computed: {
+    loading(){
+      return this.$store.state.movie.loading
+    },
+    theMovie(){
+      return this.$store.state.movie.theMovie
+    }
+  },
   created() {
     console.log(this.$route)
     this.$store.dispatch('movie/searchMovieWithId', {
       id: this.$route.params.id
     })
+  },
+  methods: {
+    requestDiffSizeImage(url, size = 700){
+      if(!url || url === 'N/A'){
+        this.imageLoading = false;
+        return '' // 그냥 return 하면 undefined 이기 때문에 빈문자열 내보내기
+      }
+      const src = url.replace('SX300', `SX${size}`);
+      this.$loadImage(src).then(() => this.imageLoading = false );
+      return src // async await 사용하면 이미지가 로딩 될때까지 return하지 않음. then은 기다리지 않고 return함.
+    }
   }
 }
 </script>
@@ -74,6 +151,64 @@ export default {
     &.etc {
       width: 50%;
       height: 50px;
+    }
+  }
+}
+.movie-details {
+  display: flex;
+  color: $gray-600;
+  .poster {
+    position: relative;
+    flex-shrink: 0;
+    width: 500px;
+    height: 500px * 3 / 2;
+    margin-right: 70px;
+    border-radius: 10px;
+    background-color: $gray-200;
+    background-size: cover;
+    background-position: center;
+  }
+  .specs {
+    flex-grow: 1;
+    .title {
+      color: $black;
+      font-family: 'Oswald', sans-serif;
+      font-size: 70px;
+      line-height: 1;
+      margin-bottom: 30px;
+    }
+    .labels {
+      color: $primary;
+      span {
+        &:not(:first-child)::before {
+          margin: 0 6px;
+          content: '\00b7';
+        }
+      }
+    }
+    .plot {
+      margin-top: 20px;
+    }
+    .ratings {
+      .rating-wrap {
+        display: flex;
+        .rating {
+          display: flex;
+          align-items: center;
+          margin-right: 32px;
+          img {
+            height: 30px;
+            flex-shrink: 0;
+            margin-right: 6px;
+          }
+        }
+      }
+    }
+    h3 {
+      margin: 24px 0 6px;
+      color: $black;
+      font-family: 'Oswald', sans-serif;
+      font-size: 20px;
     }
   }
 }

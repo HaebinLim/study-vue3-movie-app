@@ -3,7 +3,7 @@
     <input
       type="text"
       v-model="title"
-      placeholder="Search for MOvies, Series & more"
+      placeholder="Search for Movies, Series & more"
       class="form-control"
       @keyup.enter="apply" />
     <div class="selects">

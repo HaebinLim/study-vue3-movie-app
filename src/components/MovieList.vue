@@ -55,7 +55,7 @@ export default {
     text-align: center;
     background-color: $gray-200;
     &.no-result {
-      padding: 70px 0 50px;
+      padding: 70px 0 60px;
     }
   }
   .message {
