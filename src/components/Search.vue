@@ -97,5 +97,17 @@ export default {
     height: 50px;
     font-weight: bold;
   }
+  @include media-breakpoint-down(lg) {
+    display: block;
+    .selects {
+      margin: 10px 0 20px;
+      select {
+        width: 100%;
+      }
+    }
+    .btn {
+      width: 100%;
+    }
+  }
 }
 </style>

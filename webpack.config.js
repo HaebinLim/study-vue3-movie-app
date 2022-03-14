@@ -46,7 +46,14 @@ module.exports = {
           'style-loader',
           'css-loader',
           'postcss-loader',
-          'sass-loader'
+
+          // main.scss 전역 설정
+          {
+            loader: 'sass-loader',
+            options: {
+              additionalData: '@import "~/scss/main";'
+            }
+          }
         ]
       },
       {

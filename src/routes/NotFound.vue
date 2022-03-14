@@ -10,7 +10,6 @@
 </template>
 
 <style lang="scss" scoped>
-@import "~/scss/main";
 .not-found {
 	padding: 8px 20px;
 	font-family: 'Oswald', sans-serif;
