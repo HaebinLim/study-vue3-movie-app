@@ -8,6 +8,10 @@ export default createRouter({
   // Hash 
   // https://google.com/#/search
   history: createWebHashHistory(),
+  // 페이지 이동시 스크롤 최상단
+  scrollBehavior() {
+    return { top: 0 }
+  },
   // Pages
   routes: [
     // https://google.com/

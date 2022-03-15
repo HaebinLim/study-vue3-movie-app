@@ -1,6 +1,8 @@
 import axios from 'axios';
 import _uniqBy from 'lodash/uniqBy';
 
+const _defaultMessage = 'Search for the movie title!'; 
+
 export default {
 	// module로 사용하겠다는 뜻
 	namespaced: true,
@@ -8,7 +10,7 @@ export default {
 	// data
 	state: () => ({
 		movies: [], // 영화 목록
-		message: 'Search for the movie title!',
+		message: _defaultMessage,
 		loading: false,
 		theMovie: {},
 	}),
@@ -26,7 +28,9 @@ export default {
 	mutations: {
 		// 데이터 수정하는 곳
 		resetMovies(state){
-			state.movies = []
+			state.movies = [];
+			state.message = _defaultMessage;
+			state.loading = false;
 		},
 		updateState(state, payload){
 			Object.keys(payload).forEach(key => {

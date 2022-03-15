@@ -15,6 +15,9 @@ export default {
     Search,
     MovieList,
   },
- 
+  created() {
+    // 홈으로 올때마다 영화목록 초기화
+    this.$store.commit('movie/resetMovies');
+  }
 }
 </script>
