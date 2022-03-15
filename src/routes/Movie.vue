@@ -72,6 +72,7 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 import Loader from '~/components/Loader'
 
 export default {
@@ -84,20 +85,19 @@ export default {
     }
   },
   computed: {
-    loading(){
-      return this.$store.state.movie.loading
-    },
-    theMovie(){
-      return this.$store.state.movie.theMovie
-    }
+    ...mapState('movie', ['loading', 'theMovie'])
   },
   created() {
     console.log(this.$route)
-    this.$store.dispatch('movie/searchMovieWithId', {
+    //this.$store.dispatch('movie/searchMovieWithId', {
+    this.searchMovieWithId({ // 메소드에 mapActions 등록 후 실행 
       id: this.$route.params.id
     })
   },
   methods: {
+    ...mapActions('movie', [
+     'searchMovieWithId' 
+    ]),
     requestDiffSizeImage(url, size = 700){
       if(!url || url === 'N/A'){
         this.imageLoading = false;

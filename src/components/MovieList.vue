@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import MovieItem from '~/components/MovieItem'
 import Loader from '~/components/Loader'
 
@@ -31,15 +32,7 @@ export default {
   },
   computed: {
     // movies는 처음 빈 배열이고, searchMovies에서 갱신이 된 후 반응성이 유지된 상태로? 활용되기 때문에? computed에 정의한다 @.@ 
-    movies() {
-      return this.$store.state.movie.movies
-    },
-    message() {
-      return this.$store.state.movie.message
-    },
-    loading() {
-      return this.$store.state.movie.loading
-    }
+    ...mapState('movie', ['movies', 'message', 'loading'])
   },
 }
 </script>

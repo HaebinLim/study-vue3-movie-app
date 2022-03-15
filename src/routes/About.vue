@@ -17,6 +17,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Loader from '~/components/Loader';
 
 export default {
@@ -29,19 +30,20 @@ export default {
     Loader
   },
   computed: {
-    image() {
-      return this.$store.state.about.image
-    },
-    name() {
-      return this.$store.state.about.name
-    },
-    email() {
-      return this.$store.state.about.email
-    },
-    phone() {
-      return this.$store.state.about.phone
-    }
+    // ...mapState('모듈명', ['상태명']) mapState 함수 실행후 반환된 결과가 전개 연산자로 대입됨
+    ...mapState('about', ['image', 'name', 'email', 'phone'])
   },
+  /* 전개연산자 안쓰면 이렇게 쓰는거지만, 굳이 직접 할당하지 않기
+  computed: mapState('about', [ 
+    'image', 
+    'name', 
+    'email',
+    'phone' 
+  ]),
+  mounted: {
+    this.name = '사용할땐 똑같이 this.상태명으로 접근'
+  }
+  */
   mounted(){
     this.init();
   },
