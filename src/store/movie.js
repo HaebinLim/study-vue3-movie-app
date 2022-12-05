@@ -1,12 +1,12 @@
 import axios from 'axios';
 import _uniqBy from 'lodash/uniqBy';
 
-const _defaultMessage = 'Search for the movie title!'; 
+const _defaultMessage = 'Search for the movie title!';
 
 export default {
 	// module로 사용하겠다는 뜻
 	namespaced: true,
-	
+
 	// data
 	state: () => ({
 		movies: [], // 영화 목록
@@ -23,16 +23,16 @@ export default {
 		}
 		*/
 	},
-	
+
 	// methods
 	mutations: {
 		// 데이터 수정하는 곳
-		resetMovies(state){
+		resetMovies(state) {
 			state.movies = [];
 			state.message = _defaultMessage;
 			state.loading = false;
 		},
-		updateState(state, payload){
+		updateState(state, payload) {
 			Object.keys(payload).forEach(key => {
 				state[key] = payload[key];
 			});
@@ -41,17 +41,17 @@ export default {
 
 	actions: {
 		// 데이터 수정 안됨. 비동기 처리하는 곳
-	//searchMovies({ state, getters, commit }){
-		async searchMovies(context, payload){
+		//searchMovies({ state, getters, commit }){
+		async searchMovies(context, payload) {
 			if (context.state.loading) return
-			
+
 			context.commit('updateState', {
 				message: '',
 				loading: true,
 			})
 			try {
 				const res = await _fetchMovie({
-					...payload, 
+					...payload,
 					page: 1
 				});
 				const { Search, totalResults } = res.data;
@@ -64,21 +64,21 @@ export default {
 				const total = parseInt(totalResults, 10);
 				const pageLength = Math.ceil(total / 10);
 
-				if(pageLength > 1) {
-					for (let page = 2; page <= pageLength; page += 1){
-						if(page > (payload.number / 10)) break;
+				if (pageLength > 1) {
+					for (let page = 2; page <= pageLength; page += 1) {
+						if (page > (payload.number / 10)) break;
 
 						const res = await _fetchMovie({
-							...payload, 
+							...payload,
 							page
 						});
 						const { Search } = res.data;
 						context.commit('updateState', {
 							movies: [
-								...context.state.movies, 
+								...context.state.movies,
 								..._uniqBy(Search, 'imdbID')
 							],
-						})	
+						})
 					}
 				}
 			} catch ({ message }) {
@@ -95,7 +95,7 @@ export default {
 
 		async searchMovieWithId({ state, commit }, payload) {
 			if (state.loading) return
-			
+
 			commit('updateState', {
 				theMovie: {},
 				loading: true
@@ -116,11 +116,11 @@ export default {
 					loading: false,
 				})
 			}
-		}
+		},
 	},
 }
 
 // _ 현재 파일에서만 사용한다는 뜻?
-async function _fetchMovie(payload){
+async function _fetchMovie(payload) {
 	return await axios.post('/.netlify/functions/movie', payload)
 }
